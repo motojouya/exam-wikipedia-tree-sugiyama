@@ -12,7 +12,7 @@
 ```
 mkdir develop
 cd develop
-git clone https://gitlab.com/openlogi/exam-wikipedia-tree-sugiyama.git
+git clone https://github.com/motojouya/exam-wikipedia-tree-sugiyama.git
 ```
 
 2. 次にLaraDockをcloneします。
