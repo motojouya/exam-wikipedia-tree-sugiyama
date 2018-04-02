@@ -16,7 +16,7 @@ docker環境であれば、以下URLからアクセス可能。
 
 ## SetUp
 
-1. まず、ディレクトリを切って、本プロジェクトをcloneします。
+### 1. まず、ディレクトリを切って、本プロジェクトをcloneします。
 
 ```
 mkdir develop
@@ -24,7 +24,7 @@ cd develop
 git clone https://github.com/motojouya/exam-wikipedia-tree-sugiyama.git
 ```
 
-2. 次にLaraDockをcloneします。
+### 2. 次にLaraDockをcloneします。
 
 ```
 git clone https://github.com/LaraDock/laradock.git
@@ -35,7 +35,7 @@ git clone https://github.com/LaraDock/laradock.git
 git clone -b LaraDock-ToolBox https://github.com/LaraDock/laradock.git
 ```
 
-3. 2でcloneしたlaradockディレクトリに入り設定を書き換えます。
+### 3. 2でcloneしたlaradockディレクトリに入り設定を書き換えます。
 
 ```
 cd laradock/
@@ -47,14 +47,14 @@ vi .env
 APPLICATION=../exam-wikipedia-tree-sugiyama/
 ```
 
-4. docker-composeでビルドし、workspaceに入ります。
+### 4. docker-composeでビルドし、workspaceに入ります。
 
 ```
 docker-compose up -d nginx php-fpm
 docker-compose exec workspace bash
 ```
 
-5. コンテナ内でアプリケーションの設定を書き換えます。
+### 5. コンテナ内でアプリケーションの設定を書き換えます。
 
 ```
 cp .env.example .env
@@ -73,7 +73,7 @@ DB_CONNECTION=sqlite
 # DB_PASSWORD=secret
 ```
 
-6. コンテナ内で必要モジュールをインストールします。
+### 6. コンテナ内で必要モジュールをインストールします。
 
 phpモジュールのインストール
 
@@ -103,13 +103,13 @@ touch database/database.sqlite
 php artisan migrate
 ```
 
-7. APP_KEYの作成
+### 7. APP_KEYの作成
 
 ```
 php artisan key:generate
 ```
 
-8. サーバの起動
+### 8. サーバの起動
 
 ```
 php artisan serve
