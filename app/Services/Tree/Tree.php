@@ -2,6 +2,8 @@
 
 namespace App\Services\Tree;
 
+use App\Services\Keyword\KeywordService;
+
 class Tree
 {
 
@@ -17,34 +19,57 @@ class Tree
    *
    * 構築は幅優先で構築される。
    * このとき、既出のキーワードがあった場合は、
-   * そのノードは探索終了し、"@"を末端とする。
+   * そのノードは探索終了し、already = trueとする。
    *
    * 引数に与えられたノード数となるまで探索し、
-   * 探索を打ち切ったノードの末端は"$"とする。
+   * 探索を打ち切ったノードは、end_of_search = trueとする。
    * 上記のノード数にはルートも含める。
    *
    * 結果例)
-   * array(1) {
-   *   ["キーワード1"]=>
+   * array(2) {
+   *   ["name"]=> "キーワード1"
+   *   ["children"]=>
    *   array(2) {
-   *     ["キーワード2"]=>
-   *     array(3) {
-   *       ["キーワード4"]=>
-   *       array(0) {
-   *       }
-   *       ["キーワード5"]=>
-   *       array(0) {
-   *       }
-   *       ["キーワード6"]=>
-   *       array(0) {
+   *     [0]=>
+   *     array(2) {
+   *       ["name"]=> "キーワード2"
+   *       ["children"]=>
+   *       array(2) {
+   *         [0]=>
+   *         array(2) {
+   *           ["name"]=> "キーワード4"
+   *           ["children"]=> array(0) {}
+   *         }
+   *         [1]=>
+   *         array(2) {
+   *           ["name"]=> "キーワード5"
+   *           ["children"]=> array(0) {}
+   *         }
    *       }
    *     }
-   *     ["キーワード3"]=>
+   *     [1]=>
    *     array(2) {
-   *       ["キーワード2"]=>
-   *       string(1) "@"
-   *       ["キーワード7"]=>
-   *       string(1) "$"
+   *       ["name"]=> "キーワード3"
+   *       ["children"]=>
+   *       array(3) {
+   *         [0]=>
+   *         array(2) {
+   *           ["name"]=> "キーワード6"
+   *           ["children"]=> array(0) {}
+   *         }
+   *         [1]=>
+   *         array(3) {
+   *           ["name"]=> "キーワード2"
+   *           ["already"]=> bool(true)
+   *           ["children"]=> array(0) { }
+   *         }
+   *         [2]=>
+   *         array(3) {
+   *           ["name"]=> "キーワード7"
+   *           ["children"]=> array(0) {}
+   *           ["end_of_search"]=> bool(true)
+   *         }
+   *       }
    *     }
    *   }
    * }
@@ -53,57 +78,57 @@ class Tree
    * build_tree_algorithm.svg
    *
    */
-  public static function build($firstword, $keywordLimit, callable $getNextKeywords) {
+  public static function build($firstword, $keywordLimit, KeywordService $keywordService) {
 
-    $keywordTree = [];
-    $keywordTree[$firstword] = [];
+    $keywordRoot = array('name' => $firstword, 'children' => array());
 
     $untreated = [];
-    $untreated[$firstword] = &$keywordTree[$firstword];
+    $untreated[] = &$keywordRoot;
 
     $addedList = [];
     $addedList[] = $firstword;
     $keywordCount = 0;
 
     while (true) {
+      foreach($untreated as $index => $keyObj) {
 
-      $currentUntreated = $untreated;
-      foreach($currentUntreated as $keyword => $_unuse) {
-
-        $nextKeywords = $getNextKeywords($keyword);
+        $nextKeywords = $keywordService->nextKeywords($keyObj['name']);
 
         if ($nextKeywords) {
           foreach($nextKeywords as $nextword) {
 
             if (!in_array($nextword, $addedList)) {
-              $untreated[$nextword] = [];
-              $untreated[$keyword][$nextword] = &$untreated[$nextword];
+              $untreated[$index]['children'][] = array('name' => $nextword, 'children' => array());
+
+              end($untreated[$index]['children']);
+              $tempKey = key($untreated[$index]['children']);
+
+              $untreated[] = &$untreated[$index]['children'][$tempKey];
               $addedList[] = $nextword;
 
             } else {
-              $untreated[$keyword][$nextword] = "@";
+              $untreated[$index]['children'][] = array('name' => $nextword, 'already' => true, 'children' => array());
             }
 
             $keywordCount++;
             if ($keywordCount === $keywordLimit - 1) {
-              if ($untreated[$keyword][$nextword]) {
-                $untreated[$keyword][$nextword] = $untreated[$keyword][$nextword] . "$";
-              } else {
-                $untreated[$keyword][$nextword] = "$";
-              }
+              end($untreated[$index]['children']);
+              $tempKey = key($untreated[$index]['children']);
+              $untreated[$index]['children'][$tempKey]['end_of_search'] = true;
               break 3;
             }
           }
         }
-        unset($untreated[$keyword]);
+        unset($untreated[$index]);
       }
+      $untreated = array_values($untreated);
 
       if (count($untreated) === 0) {
         break;
       }
     }
 
-    return $keywordTree;
+    return $keywordRoot;
   }
 
 }

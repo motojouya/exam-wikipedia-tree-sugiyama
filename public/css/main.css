@@ -1,0 +1,191 @@
+
+/** global css */
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", メイリオ, Meiryo, Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+  font-size: 16px;
+  color: #333;
+  background-color: #fff;
+}
+main {
+  margin: auto;
+  max-width: 900px;
+  background-color: #fff;
+}
+#app {
+  width: 100%;
+}
+header {
+  margin: auto;
+  max-width: 900px;
+  height: 1.5em;
+}
+.header_text {
+  color: #191970;
+  font-size: 1em;
+  padding-left: 35px;
+  line-height: 1.2em;
+}
+
+/** globa item css */
+button {
+  border: none;
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+  text-decoration: none;
+  font-size: 1em;
+  padding: 0;
+}
+.flex {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+}
+.fixeditem {
+  flex-grow: 0;
+  flex-shrink: 0;
+  position: relative;
+  display: inline-flex;
+}
+.variableitem {
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: auto;
+  position: relative;
+  display: inline-flex;
+}
+.css_icon {
+  display: block;
+  position: relative;
+}
+.css_icon:before, .css_icon:after {
+  content: '';
+  display: block;
+  position: absolute;
+}
+
+/** search_button */
+.search_button {
+  width: 30px;
+  height: 30px;
+  background-color: #87ceeb;
+}
+.search_button:hover {
+  background-color: #191970;
+}
+.search_icon {
+  height: 30px;
+  width: 30px;
+}
+.search_icon:before {
+  height: 12px;
+  width: 12px;
+  top: 3px;
+  left: 4px;
+  border: 2px #fff solid;
+  -webkit-border-radius: 100%;
+  -moz-border-radius: 100%;
+  -ms-border-radius: 100%;
+  border-radius: 100%;
+}
+.search_icon:after {
+  height: 12px;
+  width: 3px;
+  top: 15px;
+  left: 18.5px;
+  background: #fff;
+  -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}
+
+/** search_button */
+.search_button_small {
+  width: 20px;
+  height: 20px;
+  background-color: #fff;
+}
+.search_icon_small {
+  height: 20px;
+  width: 20px;
+}
+.search_icon_small:before {
+  height: 8px;
+  width: 8px;
+  top: 5px;
+  left: 0;
+  border: 2px #87ceeb solid;
+  -webkit-border-radius: 100%;
+  -moz-border-radius: 100%;
+  -ms-border-radius: 100%;
+  border-radius: 100%;
+}
+.search_icon_small:after {
+  height: 8px;
+  width: 2px;
+  top: 14px;
+  left: 11.5px;
+  background: #87ceeb;
+  -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}
+
+/** delete button */
+.delete_icon:before, .delete_icon:after {
+  height: 3px;
+  width: 20px;
+  top: 0;
+  left: 1px;
+  background: #333;
+}
+.delete_icon:before {
+  -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}
+.delete_icon:after {
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+/** loading animation */
+.loading_anime {
+  display: inline-block;
+  width: 2em;
+  height: 2em;
+  background: #1aa;
+  -webkit-animation: spin 2s ease-in-out infinite;
+  -moz-animation: spin 2s ease-in-out infinite;
+  -ms-animation: spin 2s ease-in-out infinite;
+  -o-animation: spin 2s ease-in-out infinite;
+  animation: spin 2s ease-in-out infinite;
+}
+@-webkit-keyframes spin {
+  0% {-webkit-transform: rotate(0deg);}
+  100% {-webkit-transform: rotate(360deg);}
+}
+@-moz-keyframes spin {
+  0% {-moz-transform: rotate(0deg);}
+  100% {-moz-transform: rotate(360deg);}
+}
+@-ms-keyframes spin {
+  0% {-ms-transform: rotate(0deg);}
+  100% {-ms-transform: rotate(360deg);}
+}
+@-o-keyframes spin {
+  0% {-o-transform: rotate(0deg);}
+  100% {-o-transform: rotate(360deg);}
+}
+@keyframes spin {
+  0% {transform: rotate(0deg);}
+  100% {transform: rotate(360deg);}
+}
+

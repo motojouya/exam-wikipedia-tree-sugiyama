@@ -2,8 +2,14 @@
 # Wikitree
 
 ## 機能
-現状はartisanコマンドのみの実装。詳細は以下参照。  
+### artisanコマンド
+詳細は以下参照。  
 [artisanコマンド](app/Console/Commands/readme.md)
+
+### Webページ
+docker環境であれば、以下URLからアクセス可能。
+[Wikitree](http://http://192.168.99.100/)
+
 
 ## SetUp
 
@@ -41,7 +47,7 @@ APPLICATION=../exam-wikipedia-tree-sugiyama/
 4. docker-composeでビルドし、workspaceに入ります。
 
 ```
-docker-compose up -d workspace
+docker-compose up -d nginx php-fpm
 docker-compose exec workspace bash
 ```
 
@@ -49,5 +55,16 @@ docker-compose exec workspace bash
 
 ```
 composer install
+curl -sL https://deb.nodesource.com/setup_8.x | bash -
+apt-get install -y nodejs
+npm install
+npm run dev
+# ? php artisan key:generate
+```
+
+6. サーバの起動
+
+```
+php artisan serve
 ```
 

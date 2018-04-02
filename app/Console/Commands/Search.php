@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Services\WikipediaAccess;
 use App\Services\Tree\Tree;
+use App\Services\Keyword\HTTPKeywordService;
 
 class Search extends Command
 {
@@ -42,22 +43,22 @@ class Search extends Command
    */
   private function showKeywords($keywordTree, $level) {
 
-    foreach ($keywordTree as $keyword => $belowTree) {
+    foreach(range(0, $level) as $i) {
+      echo "  ";
+    }
+    echo "- ";
+    echo $keywordTree['name'];
+    if (array_key_exists('already', $keywordTree) && $keywordTree['already']) {
+      echo "@";
+    }
+    if (array_key_exists('end_of_search', $keywordTree) && $keywordTree['end_of_search']) {
+      echo "$";
+    }
+    echo "\n";
 
-      foreach(range(0, $level) as $i) {
-        echo "  ";
-      }
-
-      if (!$belowTree) {
-        echo "- $keyword\n";
-
-      } else if (is_string($belowTree)) {
-        echo "- $keyword$belowTree\n";
-
-      } else {
-        echo "- $keyword\n";
-        $this->showKeywords($belowTree, $level + 1);
-      }
+    $nextLevel = $level + 1;
+    foreach ($keywordTree['children'] as $belowTree) {
+      $this->showKeywords($belowTree, $nextLevel);
     }
   }
 
@@ -71,13 +72,9 @@ class Search extends Command
   public function handle() {
 
     $argKeyword = $this->argument("keyword");
+    $keywordTree = Tree::build($argKeyword, $this->keywordLimit, new HTTPKeywordService());
 
-    $keywordTree = Tree::build($argKeyword, $this->keywordLimit, function ($keyword) {
-      sleep(1);
-      return WikipediaAccess::getNextKeyword($keyword);
-    });
-
-    if ($keywordTree[$argKeyword]) {
+    if ($keywordTree['children']) {
       $this->showKeywords($keywordTree, 0);
     } else {
       echo "入力されたキーワードはWikipediaに存在しないようです。\n";
